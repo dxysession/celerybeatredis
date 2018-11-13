@@ -206,6 +206,7 @@ class PeriodicTask(object):
             for s in [Interval, Crontab]:
                 try:
                     schedule_inst = s(**schedule)
+                    break
                 except TypeError as typexc:
                     logger.warn("Create schedule failed. {}".format(schedule.__class__))
                     pass

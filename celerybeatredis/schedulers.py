@@ -88,7 +88,7 @@ class RedisScheduleEntry(object):
             return celery.schedules.schedule(
                     datetime.timedelta(
                         **{self._task.schedule['period']: self._task.schedule['every']}),
-                    self.app)
+                    app=self.app)
         elif {'minute', 'hour', 'day_of_week', 'day_of_month', 'month_of_year'}.issubset(
                 self._task.schedule.keys()):
             return celery.schedules.crontab(minute=self._task.schedule['minute'],
