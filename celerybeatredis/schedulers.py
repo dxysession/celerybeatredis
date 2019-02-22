@@ -88,7 +88,7 @@ class RedisScheduleEntry(object):
             return celery.schedules.schedule(
                     datetime.timedelta(
                         **{self._task.schedule['period']: self._task.schedule['every']}),
-                    app=self.app)
+                    self.app)
         elif {'minute', 'hour', 'day_of_week', 'day_of_month', 'month_of_year'}.issubset(
                 self._task.schedule.keys()):
             return celery.schedules.crontab(minute=self._task.schedule['minute'],
@@ -159,8 +159,10 @@ class RedisScheduleEntry(object):
     #
 
     # from celery.beat.ScheduleEntry._default_now
-    def _default_now(self):
-        return self.get_schedule().now() if self.schedule else self.app.now()
+    def default_now(self):
+        # return self.get_schedule().now() if self.schedule else self.app.now()
+        return self.schedule.now() if self.schedule else self.app.now()
+    _default_now = default_now  # compat
 
     # from celery.beat.ScheduleEntry._next_instance
     def _next_instance(self, last_run_at=None):
